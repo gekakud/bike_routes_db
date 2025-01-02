@@ -1,0 +1,161 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Bike Routes API",
+        "version": "1.0.0",
+        "description": "API documentation for Bike Routes application"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3001",
+            "description": "Local Development Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/sample": {
+            "get": {
+                "summary": "Retrieve a sample resource",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Sample GET endpoint"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a sample resource",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "data": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Resource created"
+                    }
+                }
+            }
+        },
+        "/api/v1/routes": {
+            "post": {
+                "summary": "Upload a new route file",
+                "description": "Uploads a route file and adds a new route to the repository.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "routeFile": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "The route file to upload"
+                                    },
+                                    "routeName": {
+                                        "type": "string",
+                                        "description": "Name of the route"
+                                    },
+                                    "difficulty": {
+                                        "type": "string",
+                                        "description": "Difficulty level of the route",
+                                        "enum": [
+                                            "Beginner",
+                                            "Intermediate",
+                                            "Proficient",
+                                            "Beast"
+                                        ]
+                                    },
+                                    "routeType": {
+                                        "type": "string",
+                                        "description": "Type of the route",
+                                        "enum": [
+                                            "Mtb",
+                                            "Gravel",
+                                            "Road",
+                                            "Mixed"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "routeFile",
+                                    "routeName",
+                                    "difficulty",
+                                    "routeType"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Route uploaded successfully"
+                    },
+                    "405": {
+                        "description": "Route with the given name already exists"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Download a route file",
+                "description": "Download a route file as either GeoJSON or its original format",
+                "parameters": [
+                    {
+                        "name": "routeName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "The name of the route to download"
+                    },
+                    {
+                        "name": "fileExtension",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "NotSupported",
+                                "Gpx",
+                                "GeoJson"
+                            ],
+                            "default": "GeoJson"
+                        },
+                        "description": "The file extension for the download"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Route file downloaded successfully"
+                    },
+                    "404": {
+                        "description": "Route not found or invalid file extension"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    }
+}

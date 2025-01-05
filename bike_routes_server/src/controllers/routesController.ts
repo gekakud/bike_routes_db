@@ -26,12 +26,27 @@ export const uploadRouteFile = async (req: Request, res: Response): Promise<void
       return;
     }
 
+    // check file extension is gpx or geojson, not case sensitive
+    const fileExtension = routeFile.originalname.split(".").pop()?.toLowerCase();
+    if (fileExtension !== FileExtension.GeoJson.toLowerCase() && fileExtension !== FileExtension.Gpx.toLowerCase()) {
+      res.status(400).json({ message: "Route file must be a GeoJSON or GPX file" });
+      return;
+    }
+  
+    let routeExt = FileExtension.NotSupported;
+    if (fileExtension === 'gpx') {
+      routeExt = FileExtension.Gpx;
+    }
+    if (fileExtension === 'geojson') {
+      routeExt = FileExtension.GeoJson;
+    }
     // Build Route object
     const geoJsonRouteObject: Route = await buildGeoJsonRouteObject(
       routeFile,
       routeName,
       difficulty as RouteDifficulty,
-      routeType as RouteType
+      routeType as RouteType,
+      routeExt
     );
 
     // Save the route to the repository

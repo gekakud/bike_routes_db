@@ -4,7 +4,8 @@ export const buildGeoJsonRouteObject = async (
   routeFile: Express.Multer.File,
   routeName: string,
   difficulty: RouteDifficulty,
-  routeType: RouteType
+  routeType: RouteType,
+  fileExt: FileExtension
 ): Promise<Route> => {
   // Parse and build the Route object
   const geoJsonFileContent = Buffer.from(routeFile.buffer); // Placeholder logic for conversion
@@ -15,7 +16,7 @@ export const buildGeoJsonRouteObject = async (
     routeLength: 0, // Compute based on file parsing
     routeType,
     routeDifficulty: difficulty,
-    origFileExtension: FileExtension.GeoJson, // Extract from file metadata if needed
+    origFileExtension: fileExt, // Extract from file metadata if needed
     origFileContent: routeFile.buffer,
     geoJsonFileContent,
     startLat: 0, // Placeholder

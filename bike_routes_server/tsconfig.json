@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,  // Enable JSON imports
+    "sourceMap": true,
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

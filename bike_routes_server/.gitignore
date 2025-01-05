@@ -1,0 +1,7 @@
+
+/bike_routes_server
+/node_modules
+/dist
+
+.vscode
+*.gpx
